@@ -1,1 +1,43 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DailyDream - Home</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <h1 id="site-title">DailyDream</h1>
+        </div>
+    </nav>
+
+    <main class="container">
+        <div class="content-box">
+            <h2 id="main-headline">লোড হচ্ছে...</h2>
+            <div id="main-description">অনুগ্রহ করে অপেক্ষা করুন।</div>
+        </div>
+    </main>
+
+    <script>
+        // ডাটা ফেচ করার ফাংশন
+        async function loadContent() {
+            try {
+                const response = await fetch('./data/home.json');
+                const data = await response.json();
+                
+                document.title = data.title;
+                document.getElementById('site-title').innerText = data.title;
+                document.getElementById('main-headline').innerText = data.headline;
+                document.getElementById('main-description').innerHTML = data.description;
+            } catch (error) {
+                console.error("Error loading data:", error);
+                document.getElementById('main-headline').innerText = "ডেটা লোড করতে সমস্যা হয়েছে!";
+            }
+        }
+        loadContent();
+    </script>
+</body>
+</html>
 
