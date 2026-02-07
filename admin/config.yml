@@ -1,0 +1,19 @@
+backend:
+  name: github
+  repo: Ansikderallwork-blip/dailydream.com # নিশ্চিত করুন এটি সঠিক
+  branch: main
+
+media_folder: "assets/img"
+public_folder: "/assets/img"
+
+collections:
+  - name: "pages"
+    label: "Pages"
+    files:
+      - label: "Home Page"
+        name: "home"
+        file: "data/home.json"
+        fields:
+          - { label: "Site Title", name: "title", widget: "string" }
+          - { label: "Main Headline", name: "headline", widget: "string" }
+          - { label: "Description", name: "description", widget: "markdown" }
