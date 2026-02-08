@@ -3,41 +3,59 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DailyDream - Home</title>
+    <title>ViralVult - All Posts</title>
     <link rel="stylesheet" href="css/style.css">
+    <style>
+        .post-card {
+            background: white;
+            padding: 30px;
+            margin-bottom: 40px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            text-align: left;
+        }
+        .post-card h2 { color: #2563eb; margin-top: 0; }
+        .post-meta { font-size: 0.9rem; color: #777; margin-bottom: 15px; }
+        .post-content img { max-width: 100%; height: auto; border-radius: 8px; }
+    </style>
 </head>
 <body>
     <nav class="navbar">
         <div class="container">
-            <h1 id="site-title">DailyDream</h1>
+            <h1>ViralVult</h1>
         </div>
     </nav>
 
-    <main class="container">
-        <div class="content-box">
-            <h2 id="main-headline">লোড হচ্ছে...</h2>
-            <div id="main-description">অনুগ্রহ করে অপেক্ষা করুন।</div>
-        </div>
+    <main class="container" id="post-container">
+        <p style="text-align:center; padding: 50px;">পোস্টগুলো লোড হচ্ছে...</p>
     </main>
 
     <script>
-        // ডাটা ফেচ করার ফাংশন
-        async function loadContent() {
+        async function loadPosts() {
             try {
-                const response = await fetch('./data/home.json');
-                const data = await response.json();
-                
-                document.title = data.title;
-                document.getElementById('site-title').innerText = data.title;
-                document.getElementById('main-headline').innerText = data.headline;
-                document.getElementById('main-description').innerHTML = data.description;
+                const response = await fetch('./data/posts.json');
+                const posts = await response.json();
+                const container = document.getElementById('post-container');
+                container.innerHTML = ''; // লোডিং টেক্সট মুছে ফেলা
+
+                posts.forEach(post => {
+                    const postHTML = `
+                        <article class="post-card">
+                            <h2>${post.title}</h2>
+                            <div class="post-meta">প্রকাশিত: ${new Date(post.published).toLocaleDateString('bn-BD')}</div>
+                            <div class="post-content">${post.content}</div>
+                            <hr>
+                            <a href="${post.link}" target="_blank" style="color: #2563eb; text-decoration: none; font-weight: bold;">মূল পোস্ট দেখুন →</a>
+                        </article>
+                    `;
+                    container.innerHTML += postHTML;
+                });
             } catch (error) {
-                console.error("Error loading data:", error);
-                document.getElementById('main-headline').innerText = "ডেটা লোড করতে সমস্যা হয়েছে!";
+                console.error("Error:", error);
+                document.getElementById('post-container').innerHTML = "<p>পোস্ট লোড করা যায়নি।</p>";
             }
         }
-        loadContent();
+        loadPosts();
     </script>
 </body>
 </html>
-
