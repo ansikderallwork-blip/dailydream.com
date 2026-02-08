@@ -1,0 +1,31 @@
+name: Clone Blogspot Posts
+on:
+  schedule:
+    - cron: '0 * * * *' # প্রতি ঘণ্টায় একবার অটোমেটিক চলবে
+  workflow_dispatch: # আপনি চাইলে বাটন টিপে ম্যানুয়ালি চালাতে পারবেন
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+
+      - name: Install dependencies
+        run: pip install feedparser
+
+      - name: Run fetch script
+        run: python fetch_blog.py
+
+      - name: Commit and Push changes
+        run: |
+          git config --global user.name "GitHub Action"
+          git config --global user.email "action@github.com"
+          git add data/posts.json
+          git commit -m "Auto update: Synced from Blogspot" || exit 0
+          git push
